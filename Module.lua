@@ -168,6 +168,38 @@ local Themes = {
 		ColorPickerAccent = Color3.fromRGB(219, 68, 103),
 		TextField = Color3.fromRGB(175,175,175),
 		TextFieldAccent = Color3.fromRGB(255,255,255),
+	},
+	Red = {
+		MainFrame = Color3.fromRGB(0, 0, 0),
+		Minimise = Color3.fromRGB(0, 0, 0),
+		MinimiseAccent = Color3.fromRGB(255, 0, 0),
+		Maximise = Color3.fromRGB(255, 0, 0),
+		MaximiseAccent = Color3.fromRGB(0, 0, 0),
+		NavBar = Color3.fromRGB(160, 0, 0),
+		NavBarAccent = Color3.fromRGB(0, 0, 0),
+		NavBarInvert = Color3.fromRGB(0, 0, 0),
+		TitleBar = Color3.fromRGB(160, 0, 0),
+		TitleBarAccent = Color3.fromRGB(0, 0, 0),
+		Overlay = Color3.fromRGB(160, 0, 0),
+		Banner = Color3.fromRGB(160, 0, 0),
+		BannerAccent = Color3.fromRGB(0, 0, 0),
+		Content = Color3.fromRGB(160, 0, 0),
+		Button = Color3.fromRGB(160, 0, 0),
+		ButtonAccent = Color3.fromRGB(0, 0, 0),
+		ChipSet = Color3.fromRGB(160, 0, 0),
+		ChipSetAccent = Color3.fromRGB(0, 0, 0),
+		DataTable = Color3.fromRGB(160, 0, 0),
+		DataTableAccent = Color3.fromRGB(0, 0, 0),
+		Slider = Color3.fromRGB(0, 0, 0),
+		SliderAccent = Color3.fromRGB(255, 0, 0),
+		Toggle = Color3.fromRGB(160, 0, 0),
+		ToggleAccent = Color3.fromRGB(0, 0, 0),
+		Dropdown = Color3.fromRGB(160, 0, 0),
+		DropdownAccent = Color3.fromRGB(0, 0, 0),
+		ColorPicker = Color3.fromRGB(160, 0, 0),
+		ColorPickerAccent = Color3.fromRGB(0, 0, 0),
+		TextField = Color3.fromRGB(160, 0, 0),
+		TextFieldAccent = Color3.fromRGB(0, 0, 0)
 	}
 }
 
@@ -355,9 +387,13 @@ local NavBar = {
 		NavBarShadow.Parent = NewNavBar
 		NavBarShadow.ZIndex = 100
 
-		local NavBarContent = Objects.new("Frame")
+		local NavBarContent = Objects.new("ScrollingFrame")
 		NavBarContent.Name = "Content"
 		NavBarContent.Parent = NewNavBar
+		NavBarContent.AutomaticCanvasSize = Enum.AutomaticSize.X
+		NavBarContent.ScrollingDirection = Enum.ScrollingDirection.X
+		NavBarContent.Size = NavBarContent.Size - UDim2.fromOffset(10, 0)
+		NavBarContent.Position = NavBarContent.Position + UDim2.fromOffset(5, 0)
 
 		NavBarContent.ChildAdded:Connect(function(Child)
 			pcall(function()
@@ -390,9 +426,9 @@ local NavBar = {
 		NavBarList.SortOrder = Enum.SortOrder.LayoutOrder
 		NavBarList.Parent = NavBarContent
 
-		local NavBarPadding = Objects.new("UIPadding")
-		NavBarPadding.PaddingLeft = UDim.new(0,5)
-		NavBarPadding.Parent = NavBarContent
+		--local NavBarPadding = Objects.new("UIPadding")
+		--NavBarPadding.PaddingLeft = UDim.new(0,5)
+		--NavBarPadding.Parent = NavBarContent
 
 		return NewNavBar, NavBarContent
 	end,
@@ -719,34 +755,34 @@ function Material.Load(Config)
 
 	pcall(function() OldInstance:Destroy() end);
 
-    local function GetExploit()
-        local Table = {};
-        Table.Synapse = syn;
-        Table.ProtoSmasher = pebc_create;
-        Table.Sentinel = issentinelclosure;
-        Table.ScriptWare = getexecutorname;
+	local function GetExploit()
+		local Table = {};
+		Table.Synapse = syn;
+		Table.ProtoSmasher = pebc_create;
+		Table.Sentinel = issentinelclosure;
+		Table.ScriptWare = getexecutorname;
 
-        for ExploitName, ExploitFunction in next, Table do
-            if (ExploitFunction) then
-                return ExploitName;
-            end;
-        end;
+		for ExploitName, ExploitFunction in next, Table do
+			if (ExploitFunction) then
+				return ExploitName;
+			end;
+		end;
 
-        return "Undefined";
-    end;
+		return "Undefined";
+	end;
 
-    local ProtectFunctions = {};
-    ProtectFunctions.Synapse = function(GuiObject) syn.protect_gui(GuiObject); GuiObject.Parent = CoreGuiService; end;
-    ProtectFunctions.ProtoSmasher = function(GuiObject) GuiObject.Parent = get_hidden_gui(); end;
-    ProtectFunctions.Sentinel = function(GuiObject) GuiObject.Parent = CoreGuiService; end;
-    ProtectFunctions.ScriptWare = function(GuiObject) GuiObject.Parent = gethui(); end;
-    ProtectFunctions.Undefined = function(GuiObject) GuiObject.Parent = CoreGuiService; end;
+	local ProtectFunctions = {};
+	ProtectFunctions.Synapse = function(GuiObject) syn.protect_gui(GuiObject); GuiObject.Parent = CoreGuiService; end;
+	ProtectFunctions.ProtoSmasher = function(GuiObject) GuiObject.Parent = get_hidden_gui(); end;
+	ProtectFunctions.Sentinel = function(GuiObject) GuiObject.Parent = CoreGuiService; end;
+	ProtectFunctions.ScriptWare = function(GuiObject) GuiObject.Parent = gethui(); end;
+	ProtectFunctions.Undefined = function(GuiObject) GuiObject.Parent = CoreGuiService; end;
 
 	local NewInstance = Objects.new("ScreenGui")
 	NewInstance.Name = Title
-    ProtectFunctions[GetExploit()](NewInstance);
+	ProtectFunctions[GetExploit()](NewInstance);
 
-    getgenv().OldInstance = NewInstance;
+	getgenv().OldInstance = NewInstance;
 
 	MainGUI = NewInstance
 
@@ -918,12 +954,10 @@ function Material.Load(Config)
 		BannerOverlay.ZIndex = 75
 		BannerOverlay.Parent = MainFrame
 
-		local TextSize = TextService:GetTextSize(BannerText, 12, Enum.Font.Gotham, Vector2.new(0,0)).X
-
-		local Lines = math.ceil((TextSize) / (MainFrame.AbsoluteSize.X - 10))
-
-		local BannerSize = UDim2.fromScale(1,0) + UDim2.fromOffset(-10,(Lines*20)+40)
-		local BannerPosition = UDim2.fromScale(0,1) + UDim2.fromOffset(5,(-Lines*20)-45)
+		local TextSize = TextService:GetTextSize(BannerText, 12, Enum.Font.Gotham, Vector2.new(MainFrame.AbsoluteSize.X - 10, math.huge))
+		local Lines = math.ceil(TextSize.Y / 20)
+		local BannerSize = UDim2.new(1, -10, 0, (Lines * 20) + 40)
+		local BannerPosition = UDim2.new(0, 5, 1, (-Lines * 20) - 45)
 
 		local Banner = Objects.new("Round")
 		Banner.Name = "Banner"
@@ -939,8 +973,9 @@ function Material.Load(Config)
 		BannerLabel.Text = BannerText
 		BannerLabel.TextColor3 = Theme.BannerAccent
 		BannerLabel.TextSize = 12
-		BannerLabel.Font = Enum.Font.Gotham
+		BannerLabel.Font = Enum.Font.Code -- Gotham
 		BannerLabel.Size = UDim2.fromScale(1,0) + UDim2.fromOffset(-5,(Lines*20)+5)
+		BannerLabel.RichText = true
 		BannerLabel.TextWrapped = true
 		BannerLabel.Position = UDim2.fromOffset(5,0)
 		BannerLabel.TextTransparency = 1
@@ -1141,7 +1176,7 @@ function Material.Load(Config)
 
 		function OptionLibrary.Dropdown(DropdownConfig)
 			local DropdownText = DropdownConfig.Text or "nil dropdown"
-            local DropdownValue = DropdownConfig.Default
+			local DropdownValue = DropdownConfig.Default
 			local DropdownCallback = DropdownConfig.Callback or function() print("nil dropdown") end
 			local DropdownOptions = DropdownConfig.Options or {}
 			local Menu = DropdownConfig.Menu or {}
@@ -1223,7 +1258,7 @@ function Material.Load(Config)
 				NewButton.MouseButton1Down:Connect(function()
 					DropdownCallback(Value)
 					DropdownTitle.Text = DropdownText..": "..Value
-                    DropdownValue = Value
+					DropdownValue = Value
 				end)
 			end)
 
@@ -1251,9 +1286,9 @@ function Material.Load(Config)
 				return DropdownTitle.Text
 			end
 
-            function DropdownLibrary:GetValue()
-                return DropdownValue
-            end
+			function DropdownLibrary:GetValue()
+				return DropdownValue
+			end
 
 			function DropdownLibrary:SetOptions(NewMenu)
 				DropdownOptions = NewMenu or {}
@@ -1288,7 +1323,7 @@ function Material.Load(Config)
 					NewButton.MouseButton1Down:Connect(function()
 						DropdownCallback(Value)
 						DropdownTitle.Text = DropdownText..": "..Value
-                        DropdownValue = Value
+						DropdownValue = Value
 					end)
 				end)
 			end
@@ -2409,9 +2444,9 @@ function Material.Load(Config)
 				return SliderTitle.Text
 			end
 
-            function SliderLibrary:GetValue()
-                return tonumber(SliderValue.Text)
-            end
+			function SliderLibrary:GetValue()
+				return tonumber(SliderValue.Text)
+			end
 
 			function SliderLibrary:SetMin(Value)
 				SliderMin = Value
